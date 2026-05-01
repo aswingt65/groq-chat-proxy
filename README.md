@@ -2,17 +2,6 @@
 
 This document explains the step-by-step process to call Groq APIs using a Vercel-hosted proxy endpoint.
 
----
-
-## 📌 Overview
-
-Instead of calling Groq directly, we route requests through a Vercel-hosted proxy. This helps in:
-
-* Avoiding CORS issues
-* Securing API keys
-* Enabling flexible backend control
-
----
 
 ## 🔗 Reference Repository
 
@@ -46,12 +35,12 @@ https://github.com/aswingt65/groq-chat-proxy
 Once deployed:
 
 * Open your Vercel project URL
-* Ensure the API endpoint is reachable
+* Ensure the Chatbot is working with your api_key
 
 Example:
 
 ```id="ex1"
-https://your-project-name.vercel.app/api/proxy/groq
+https://your-project-name.vercel.app
 ```
 
 ---
@@ -116,13 +105,6 @@ print(chat_completion.choices[0].message.content)
   /api/proxy/groq
   ```
 
----
-
-## ✅ Final Endpoint Format
-
-```id="ex3"
-https://your-project-name.vercel.app/api/proxy/groq
-```
 
 ---
 
@@ -137,19 +119,3 @@ https://your-project-name.vercel.app/api/proxy/groq
 | 5    | Use endpoint in Groq SDK |
 
 ---
-
-## 🚀 Outcome
-
-You now have:
-
-* A working Groq proxy hosted on Vercel
-* A callable endpoint from local or external apps
-* A flexible setup for LLM integration
-
----
-
-If you want, I can extend this with:
-
-* Architecture diagram
-* Request/response flow
-* Error handling & debugging tips
