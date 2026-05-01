@@ -1,36 +1,155 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 🚀 Groq API via Vercel Proxy – Setup Guide
 
-## Getting Started
+This document explains the step-by-step process to call Groq APIs using a Vercel-hosted proxy endpoint.
 
-First, run the development server:
+---
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+## 📌 Overview
+
+Instead of calling Groq directly, we route requests through a Vercel-hosted proxy. This helps in:
+
+* Avoiding CORS issues
+* Securing API keys
+* Enabling flexible backend control
+
+---
+
+## 🔗 Reference Repository
+
+GitHub Repo:
+https://github.com/aswingt65/groq-chat-proxy
+
+---
+
+## 🛠️ Setup Steps
+
+### 1. Fork the Repository
+
+* Go to the repository link above
+* Click on **Fork**
+* This will create a copy in your GitHub account
+
+---
+
+### 2. Deploy to Vercel
+
+* Go to https://vercel.com
+* Sign in with your GitHub account
+* Click **"Add New Project"**
+* Select your forked repository
+* Deploy the project
+
+---
+
+### 3. Verify Deployment
+
+Once deployed:
+
+* Open your Vercel project URL
+* Ensure the API endpoint is reachable
+
+Example:
+
+```id="ex1"
+https://your-project-name.vercel.app/api/proxy/groq
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+---
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### 4. Disable Vercel Authentication
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+By default, Vercel may block external API access.
 
-## Learn More
+To disable:
 
-To learn more about Next.js, take a look at the following resources:
+**Navigate in Vercel dashboard:**
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+```
+Your Project → Settings → Deployment Protection → Vercel Authentication → Turn Off → Save
+```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+✅ This allows local or external systems to call your endpoint
 
-## Deploy on Vercel
+---
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+### 5. Use the Proxy Endpoint Locally
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Use the Groq Python SDK and point it to your Vercel proxy.
+
+#### 📄 Example: `groq-local.py`
+
+```python id="ex2"
+import os
+from groq import Groq
+
+# Configure client to use Vercel proxy
+client = Groq(
+    api_key="your_api_key",
+    base_url="https://your-project-name.vercel.app/api/proxy/groq",
+)
+
+chat_completion = client.chat.completions.create(
+    messages=[
+        {
+            "role": "user",
+            "content": "Explain the importance of fast language models.",
+        }
+    ],
+    model="llama-3.3-70b-versatile",
+)
+
+print(chat_completion.choices[0].message.content)
+```
+
+---
+
+## 🔑 Key Notes
+
+* Replace:
+
+  * `your_api_key` → Your Groq API Key
+  * `your-project-name` → Your Vercel deployment URL
+* Ensure your Vercel deployment is public
+* Make sure the endpoint path is exactly:
+
+  ```
+  /api/proxy/groq
+  ```
+
+---
+
+## ✅ Final Endpoint Format
+
+```id="ex3"
+https://your-project-name.vercel.app/api/proxy/groq
+```
+
+---
+
+## 🎯 Summary
+
+| Step | Action                   |
+| ---- | ------------------------ |
+| 1    | Fork the repo            |
+| 2    | Deploy on Vercel         |
+| 3    | Verify deployment        |
+| 4    | Disable authentication   |
+| 5    | Use endpoint in Groq SDK |
+
+---
+
+## 🚀 Outcome
+
+You now have:
+
+* A working Groq proxy hosted on Vercel
+* A callable endpoint from local or external apps
+* A flexible setup for LLM integration
+
+---
+
+If you want, I can extend this with:
+
+* Architecture diagram
+* Request/response flow
+* Error handling & debugging tips
